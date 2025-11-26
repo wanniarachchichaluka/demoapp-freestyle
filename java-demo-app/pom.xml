@@ -1,27 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.hgautam.examples</groupId>
     <artifactId>java-demo-app</artifactId>
-    <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
     <properties>
-        <!-- https://maven.apache.org/general.html#encoding-warning -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.release>21</maven.compiler.release>
         <junit.version>5.3.1</junit.version>
-        <jacoco.version>0.8.2</jacoco.version>
+        <jacoco.version>0.8.10</jacoco.version>
         <spotbugs.version>4.0.0</spotbugs.version>
         <pmd.version>3.11.0</pmd.version>
     </properties>
 
     <dependencies>
-        <!-- junit 5, unit test -->
+        <!-- JUnit 5 for unit testing -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
@@ -42,17 +41,28 @@
                 <artifactId>maven-pmd-plugin</artifactId>
                 <version>${pmd.version}</version>
             </plugin>
-
         </plugins>
     </reporting>
 
     <build>
         <finalName>java-demo-app</finalName>
         <plugins>
+
+            <!-- Compiler Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <release>${maven.compiler.release}</release>
+                </configuration>
+            </plugin>
+
+            <!-- Surefire for running tests -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
+                <version>3.0.0-M7</version>
                 <configuration>
                     <includes>
                         <include>**/*Test*.java</include>
@@ -60,27 +70,36 @@
                     <useModulePath>false</useModulePath>
                 </configuration>
             </plugin>
+
+            <!-- Maven Site & Info Reports -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.9.0</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.12.0</version>
             </plugin>
 
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>3.4.0</version>
+            </plugin>
+
+            <!-- JaCoCo Plugin for code coverage -->
+            <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.10</version>
+                <version>${jacoco.version}</version>
                 <executions>
+
+                    <!-- Prepare agent for tests -->
                     <execution>
+                        <id>prepare-agent</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
+
+                    <!-- Generate coverage report -->
                     <execution>
                         <id>report</id>
                         <phase>prepare-package</phase>
@@ -88,6 +107,8 @@
                             <goal>report</goal>
                         </goals>
                     </execution>
+
+                    <!-- Optional: coverage check -->
                     <execution>
                         <id>jacoco-check</id>
                         <goals>
@@ -108,10 +129,10 @@
                             </rules>
                         </configuration>
                     </execution>
+
                 </executions>
             </plugin>
 
         </plugins>
     </build>
-
 </project>
